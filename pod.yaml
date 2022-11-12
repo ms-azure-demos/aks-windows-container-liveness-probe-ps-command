@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: livenesstest
+spec:
+  containers:
+  - name: livenesstest-container
+    image: mcr.microsoft.com/windows/servercore:ltsc2019
+    args:
+    - powershell
+    - /c
+    - sc -value 'healthy' c:\\health.txt; echo 'Created file & wait 30 secs'; Start-Sleep -s 30; del c:\\health.txt; echo 'Deleted file & wait for 60 secs'; Start-Sleep -s 60
+    livenessProbe:
+      exec:
+        command: # this command error out ie return a non zero value if the file is not present. That signal K8s that the pod is not live. 
+        - cmd 
+        - /c 
+        - dir 
+        - c:\health.txt
+      initialDelaySeconds: 5
+      periodSeconds: 5
+  nodeSelector:
+    "kubernetes.io/os": windows
