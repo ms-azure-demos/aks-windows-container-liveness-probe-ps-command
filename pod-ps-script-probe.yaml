@@ -17,7 +17,7 @@ spec:
         - /c 
         - dir 
         - c:\health.txt
-      initialDelaySeconds: 5
-      periodSeconds: 5
+      initialDelaySeconds: 30
+      periodSeconds: 30
   nodeSelector:
     "kubernetes.io/os": windows
